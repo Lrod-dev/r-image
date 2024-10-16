@@ -1,0 +1,16 @@
+{
+  "AppImageConfigName": "r-kernel-app-config",
+  "KernelGatewayImageConfig": {
+    "KernelSpecs": [
+      {
+        "Name": "ir",
+        "DisplayName": "R (IRKernel)"
+      }
+    ],
+    "FileSystemConfig": {
+      "MountPath": "/home/sagemaker-user",
+      "DefaultUid": 1000,
+      "DefaultGid": 100
+    }
+  }
+}
