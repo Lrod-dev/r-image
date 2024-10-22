@@ -62,9 +62,6 @@ RUN mamba install --quiet --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install additional R packages not available in conda
-RUN R -e "install.packages(c('remotes', 'plotly', 'jsonlite', 'httr', 'data.table', 'aws.s3'), repos='${R_REPO}', dependencies=TRUE)"
-
 # Install IRKernel to Jupyter
 RUN R -e "IRkernel::installspec(user = FALSE)"
 
@@ -87,6 +84,9 @@ RUN apt-get update --yes && \
     texlive-fonts-recommended \
     texlive-fonts-extra && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+#other system dependencies may be needed for R packages
+#for units: libudunits2-dev, for Cairo: libcairo2-dev, for rsvg: librsvg2-dev
 
 # Install Python data science packages
 RUN pip install numpy pandas matplotlib seaborn
