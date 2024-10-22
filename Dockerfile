@@ -1,5 +1,6 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
+# Luis R version 2 Dockerfile
 ARG OWNER=jupyter
 ARG BASE_CONTAINER=$OWNER/minimal-notebook
 FROM $BASE_CONTAINER
@@ -32,7 +33,7 @@ RUN apt-get update --yes && \
     gcc && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# R packages including IRKernel which gets installed globally.
+# R packages including IRKernel installed globally
 RUN mamba install --quiet --yes \
     "r-base=${R_VERSION}" \
     'r-caret' \
@@ -67,8 +68,10 @@ RUN R -e "install.packages(c('remotes', 'plotly', 'jsonlite', 'httr', 'data.tabl
 # Install IRKernel to Jupyter
 RUN R -e "IRkernel::installspec(user = FALSE)"
 
-# Set CRAN repository for R
-RUN echo 'options(repos = c(CRAN = "'${R_REPO}'"))' >> /usr/lib/R/etc/Rprofile.site
+# Set CRAN repository for R in the correct path
+RUN R_HOME=$(R RHOME) && \
+    mkdir -p ${R_HOME}/etc && \
+    echo 'options(repos = c(CRAN = "'${R_REPO}'"))' >> ${R_HOME}/etc/Rprofile.site
 
 # Create user library folder for R
 RUN mkdir -p ${R_USER_LIB_PATH} && \
